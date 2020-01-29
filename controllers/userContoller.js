@@ -29,6 +29,7 @@ const validateSchema = Joi.object({
 dotenv.config();
 
 module.exports = {
+  //create a new user
   userSignup: (req, res) => {
     // validate request data
     const { error } = validateSchema.validate({
@@ -80,6 +81,7 @@ module.exports = {
         }
       });
   },
+  //user login
   userLogin: (req, res) => {
     userModel
       .findOne({ email: req.body.email })
@@ -117,6 +119,7 @@ module.exports = {
         });
       });
   },
+  // get other users details
   otherUsers: (req, res) => {
     userModel
       .find({}, { email: 0, password: 0, _id: 0, __v: 0 })
@@ -128,9 +131,10 @@ module.exports = {
         res.json({ error: err });
       });
   },
+  //send all books data
   books: (req, res) => {
     bookModel
-      .find({})
+      .find({}, { _id: 0, __v: 0 })
       .exec()
       .then(books => {
         res.json(books);
@@ -139,6 +143,7 @@ module.exports = {
         res.send({ error: err });
       });
   },
+  //search specific user by email
   user: (req, res) => {
     userModel
       .findOne(
@@ -154,6 +159,7 @@ module.exports = {
         res.json({ error: err });
       });
   },
+  //single book search by name
   book: (req, res) => {
     bookModel
       .findOne({ name: req.params.bookName })
