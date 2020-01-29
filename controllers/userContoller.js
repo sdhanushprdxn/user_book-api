@@ -1,5 +1,5 @@
 const userModel = require('../models/userModel');
-// const bookModel = require('../models/bookModel');
+const bookModel = require('../models/bookModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
@@ -80,5 +80,90 @@ module.exports = {
         }
       });
   },
-  userLogin: (req, res) => {}
+  userLogin: (req, res) => {
+    userModel
+      .findOne({ email: req.body.email })
+      .exec()
+      .then(user => {
+        if (user) {
+          bcrypt.compare(req.body.password, user.password, (err, feed) => {
+            if (feed) {
+              //creating token for sucessful login
+              const token = jwt.sign(
+                {
+                  email: user.email,
+                  userId: user._id
+                },
+                process.env.ACCESS_SECRET_KEY,
+                {
+                  expiresIn: '1h'
+                }
+              );
+              return res.header('auth-token', token).json({
+                status: 'Logged In',
+                message: `Welcome ${user.name}`
+              });
+            }
+            if (err) {
+              return res.status(500).json({ message: 'login failed' });
+            }
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({
+          status: 'Log in failed',
+          result: 'Invalid Username Password Combination'
+        });
+      });
+  },
+  otherUsers: (req, res) => {
+    userModel
+      .find({}, { email: 0, password: 0, _id: 0, __v: 0 })
+      .exec()
+      .then(users => {
+        res.json(users);
+      })
+      .catch(err => {
+        res.json({ error: err });
+      });
+  },
+  books: (req, res) => {
+    bookModel
+      .find({})
+      .exec()
+      .then(books => {
+        res.json(books);
+      })
+      .catch(err => {
+        res.send({ error: err });
+      });
+  },
+  user: (req, res) => {
+    userModel
+      .findOne(
+        { email: req.params.email },
+        { email: 0, password: 0, _id: 0, __v: 0 }
+      )
+      .exec()
+      .then(user => {
+        if (user) return res.json(user);
+        res.status(404).json({ message: 'user not found' });
+      })
+      .catch(err => {
+        res.json({ error: err });
+      });
+  },
+  book: (req, res) => {
+    bookModel
+      .findOne({ name: req.params.bookName })
+      .exec()
+      .then(book => {
+        if (book) return res.json(book);
+        res.status(404).json({ message: 'Book not found' });
+      })
+      .catch(err => {
+        res.json({ error: err });
+      });
+  }
 };
