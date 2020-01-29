@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.routers();
+const router = new express.Router();
 const changes = require('./changes');
 const login = require('./adminLogin');
 const register = require('./adminRegister');
