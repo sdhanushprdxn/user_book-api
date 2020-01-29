@@ -1,5 +1,6 @@
 const adminModel = require('../models/adminModel');
 const bookModel = require('../models/bookModel');
+const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
@@ -188,6 +189,7 @@ module.exports = {
       .find({}, { _id: 0, __v: 0 })
       .exec()
       .then(books => {
+        if (books.length === 0) return res.send({ status: 'No data' });
         res.json(books);
       })
       .catch(err => {
@@ -230,6 +232,7 @@ module.exports = {
       .find({}, { password: 0, _id: 0, __v: 0 })
       .exec()
       .then(users => {
+        if (users.length === 0) return res.send({ status: 'No data' });
         res.json(users);
       })
       .catch(err => {
