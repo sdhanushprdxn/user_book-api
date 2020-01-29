@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.routers();
-const login = require('./');
-const register = require('./');
-const changes = require('./');
+const changes = require('./changes');
+const login = require('./adminLogin');
+const register = require('./adminRegister');
 
 router.use('/login', login);
 router.use('/register', register);
