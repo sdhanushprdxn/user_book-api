@@ -6,31 +6,30 @@ const dotenv = require('dotenv');
 const Joi = require('@hapi/joi');
 const saltRounds = 10;
 
-const validateSchema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .required(),
-  email: Joi.string()
-    .min(6)
-    .required()
-    .email(),
-  password: Joi.string()
-    .alphanum()
-    .min(6)
-    .required(),
-  city: Joi.string()
-    .min(3)
-    .required(),
-  contact: Joi.number()
-    .min(10)
-    .required()
-});
-
 dotenv.config();
 
 module.exports = {
   //create a new user
   userSignup: (req, res) => {
+    const validateSchema = Joi.object({
+      name: Joi.string()
+        .min(3)
+        .required(),
+      email: Joi.string()
+        .min(6)
+        .required()
+        .email(),
+      password: Joi.string()
+        .alphanum()
+        .min(6)
+        .required(),
+      city: Joi.string()
+        .min(3)
+        .required(),
+      contact: Joi.number()
+        .min(10)
+        .required()
+    });
     // validate request data
     const { error } = validateSchema.validate({
       name: req.body.name,

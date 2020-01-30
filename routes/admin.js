@@ -1,11 +1,17 @@
 const express = require('express');
 const router = new express.Router();
-const changes = require('./changes');
-const login = require('./adminLogin');
-const register = require('./adminRegister');
+const controller = require('../controllers/adminController');
+const verify = require('../util/tokenVerify');
 
-router.use('/login', login);
-router.use('/register', register);
-router.use('/changes', changes);
+router.use('/login', controller.adminLogin);
+router.use('/register', controller.adminRegister);
+router.post('/newbook', verify, controller.newBook);
+router.put('/updatebookdetails', verify, controller.updateBook);
+router.delete('/deletebook/:bookname', verify, controller.deleteBook);
+router.delete('/deleteuser/:email', verify, controller.deleteUser);
+router.get('/allusers', verify, controller.otherUsers);
+router.get('/books', verify, controller.books);
+router.get('/specificUser/:email', verify, controller.user);
+router.get('/book/:bookName', verify, controller.book);
 
 module.exports = router;

@@ -1,11 +1,13 @@
 const express = require('express');
 const router = new express.Router();
-const access = require('./access');
-const login = require('./userLogin');
-const signup = require('./userSignup');
+const controller = require('../controllers/userContoller');
+const verify = require('../util/tokenVerify');
 
-router.use('/login', login);
-router.use('/signup', signup);
-router.use('/access', access);
+router.use('/login', controller.userLogin);
+router.use('/signup', controller.userSignup);
+router.get('/allusers', verify, controller.otherUsers);
+router.get('/books', verify, controller.books);
+router.get('/specificUser/:email', verify, controller.user);
+router.get('/book/:bookName', verify, controller.book);
 
 module.exports = router;
