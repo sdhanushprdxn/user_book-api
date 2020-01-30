@@ -7,50 +7,31 @@ const dotenv = require('dotenv');
 const Joi = require('@hapi/joi');
 const saltRounds = 10;
 
-const validateSchema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .required(),
-  email: Joi.string()
-    .min(6)
-    .required()
-    .email(),
-  password: Joi.string()
-    .alphanum()
-    .min(6)
-    .required(),
-  city: Joi.string()
-    .min(3)
-    .required(),
-  contact: Joi.number()
-    .min(10)
-    .required()
-});
-
-const validateBookSchema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .required(),
-  author: Joi.string()
-    .min(6)
-    .required(),
-  edition: Joi.string()
-    .alphanum()
-    .min(6)
-    .required(),
-  type: Joi.string()
-    .min(3)
-    .required(),
-  price: Joi.number()
-    .min(1)
-    .required()
-});
-
 dotenv.config();
 
 module.exports = {
   //create a new admin
   adminRegister: (req, res) => {
+    //validation schema using happi joi
+    const validateSchema = Joi.object({
+      name: Joi.string()
+        .min(3)
+        .required(),
+      email: Joi.string()
+        .min(6)
+        .required()
+        .email(),
+      password: Joi.string()
+        .alphanum()
+        .min(6)
+        .required(),
+      city: Joi.string()
+        .min(3)
+        .required(),
+      contact: Joi.number()
+        .min(10)
+        .required()
+    });
     // validate request data
     const { error } = validateSchema.validate({
       name: req.body.name,
@@ -141,6 +122,25 @@ module.exports = {
   },
   //add new book
   newBook: (req, res) => {
+    //validation schema using happi joi
+    const validateBookSchema = Joi.object({
+      name: Joi.string()
+        .min(3)
+        .required(),
+      author: Joi.string()
+        .min(6)
+        .required(),
+      edition: Joi.string()
+        .alphanum()
+        .min(6)
+        .required(),
+      type: Joi.string()
+        .min(3)
+        .required(),
+      price: Joi.number()
+        .min(1)
+        .required()
+    });
     // validate request data
     const { error } = validateBookSchema.validate({
       name: req.body.name,

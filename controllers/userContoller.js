@@ -11,6 +11,7 @@ dotenv.config();
 module.exports = {
   //create a new user
   userSignup: (req, res) => {
+    //validation schema using happi joi
     const validateSchema = Joi.object({
       name: Joi.string()
         .min(3)
